@@ -1,0 +1,370 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>june client encrypt memo</title>
+<script src="./base64.js"></script>
+<script src="./rawinflate.js"></script>
+<script src="./rawdeflate.js"></script>
+<script src="./aes.js"></script>
+<script src="./mt.js"></script>
+<script src="./aesutil.js"></script>
+<script>
+$ = function(id){ return document.getElementById(id) };
+var _textLen = new Array(-1, 5, 5, 5, 5, 10, 0, 0, 10);
+var _settings = new Array();
+
+
+function createTd(id, n, value, size) {
+	var td = document.createElement('td');
+	td.id = id + n;
+	if(value != undefined) {
+		var inp = document.createElement('input');
+		if(size > 0) {
+			inp.type = 'text';
+			inp.size = size
+		} else {
+			inp.type = 'checkbox';
+			inp.checked = true;
+		}
+		inp.value = value;
+		td.appendChild(inp);
+	}
+	return td;
+}
+function add(name, account, password, rule, url, create, update, memo) {
+	var b = $('add');
+	if(b.value == 'set') return set();
+	if(b.value == 'edit') return edit();
+
+	var ta = $('accountList');
+	var n = Number($('n').value);
+	var tr = document.createElement('tr'), j = 0;
+	tr.appendChild(createTd('ch', n, '', _textLen[j++]));
+	tr.appendChild(createTd('name', n, name, _textLen[j++]));
+	tr.appendChild(createTd('account', n, account, _textLen[j++]));
+	tr.appendChild(createTd('password', n, password, _textLen[j++]));
+	tr.appendChild(createTd('rule', n, rule, _textLen[j++]));
+	tr.appendChild(createTd('url', n, url, _textLen[j++]));
+	var td = createTd('create', n);
+	td.innerText = create;
+	tr.appendChild(td);
+	td = createTd('update', n);
+	td.innerText = update;
+	tr.appendChild(td);
+	tr.appendChild(createTd('memo', n, memo, _textLen[j+2]));
+	ta.appendChild(tr);
+	$('n').value = n + 1;
+
+	updateDisplay();
+}
+
+function getText(id) {
+	var res = null, td = $(id);
+	if(td) {
+		if(td.hasChildNodes && td.firstChild && td.firstChild.type == 'text') {
+			res = td.firstChild.value;
+		} else if(td.hasChildNodes && td.firstChild && td.firstChild.href) {
+			res = td.firstChild.href;
+		} else if(td.innerText.length) {
+			res = td.innerText;
+		}
+	}
+	return res;
+}
+function set() {
+	var ta = $('accountList'), c, i, n = Number($('n').value);
+	var names = new Array(), j;
+	for(i = 0; i < n; i++) {
+		c = $('ch' + i);
+		if(c && c.hasChildNodes) {
+			names[i] = getText('name' + i);
+			if(c.firstChild.checked) {
+				for(j = 0; j < i; j++) {
+					if(names[i] == names[j]) {
+						alert('Name must be unique.');
+						return;
+					}
+				}
+				c = c.parentNode.childNodes;
+				for(i = 0; i < c.length; i++) {
+					if(c[i].id.match(/ch\d+/)) {
+						if(c[i].hasChildNodes) c[i].firstChild.checked = false;
+					} else if(c[i].id.match(/create\d+/)) {
+						if(!c[i].innerText.length) c[i].innerText = (new Date()).toLocaleString();
+					} else if(c[i].id.match(/update\d+/)) {
+						// nop  c[i].innerText = (new Date()).toLocaleString();
+					} else if(c[i].hasChildNodes) {
+						var text = null;
+						for(var j = 0; j < c[i].childNodes.length; j++) {
+							if(text == null && c[i].childNodes[j].type == 'text') text = c[i].childNodes[j].value;
+							if(c[i].childNodes[j].type) c[i].removeChild(c[i].childNodes[j]);
+						}
+						if(text != null && text.length > 0) {
+							if(c[i].id.match(/url\d+/)) {
+								var a = document.createElement('a');
+								a.href = text;
+								a.innerText = 'url';
+								c[i].appendChild(a);
+							} else {
+								c[i].innerText = text;
+							}
+						}
+					}
+				}
+			}
+		}
+	}
+
+	updateDisplay();
+}
+function edit() {
+	var ta = $('accountList'), c, n = Number($('n').value);
+	for(var i = 0; i < n; i++) {
+		c = $('ch' + i);
+		if(c && c.hasChildNodes && c.firstChild.checked) {
+			c = c.parentNode.childNodes;
+			for(var k = 0; k < c.length; k++) {
+				if(!c[k].id.match(/(ch|create|update)\d+/)) {
+					var text = c[k].innerText;
+					if(c[k].id.match(/url\d+/) && c[k].hasChildNodes && c[k].firstChild && c[k].firstChild.href) text = c[k].firstChild.href;
+					for(var j = 0; j < c[k].childNodes.length; j++) {
+						c[k].removeChild(c[k].childNodes[j]);
+					}
+					var inp = document.createElement('input');
+					if(_textLen[k] >= 0) {
+						inp.type = 'text';
+						inp.size = _textLen[k];
+					} else {
+						inp.type = 'checkbox';
+						inp.checked = true;
+					}
+					inp.value = text;
+					c[k].appendChild(inp);
+				}
+			}
+		}
+	}
+
+	updateDisplay();
+}
+function del() {
+	if(!confirm('delete?')) return;
+	var ta = $('accountList'), c, i, n = Number($('n').value);
+	for(i = 0; i < n; i++) {
+		c = $('ch' + i);
+		if(c && c.hasChildNodes && c.firstChild.checked) ta.removeChild(c.parentNode);
+	}
+
+	updateDisplay();
+}
+function updateDisplay() {
+	var ta = $('accountList'), c, i, j = -1, n = Number($('n').value);
+	var b = $('add'), bSet = false;
+	var settings = new Array(), dat;
+	for(i = 0; i < n; i++) {
+		c = $('name' + i);
+		if(c) {
+			dat = {};
+			dat['name'] = getText('name' + i);
+			dat['account'] = getText('account' + i);
+			dat['password'] = getText('password' + i);
+			dat['rule'] = getText('rule' + i);
+			dat['url'] = getText('url' + i);
+			dat['create'] = getText('create' + i);
+			dat['update'] = getText('update' + i);
+			dat['memo'] = getText('memo' + i);
+			for(j = 0; j < _settings.length; j++) {
+				if(_settings[j].name == dat['name']) {
+					for(var a in dat) if(dat[a] != _settings[j][a]) {
+						j = _settings.length;
+						break;
+					}
+					break;
+				}
+			}
+			if(j == _settings.length) {
+				dat['update'] = (new Date()).toLocaleString();
+				$('update' + i).innerText = dat['update']
+			}
+			settings.push(dat);
+			j = i;
+		}
+		if(c && c.hasChildNodes && c.firstChild && c.firstChild.type == 'text') {
+			b.value = 'set';
+			bSet = true;
+		}
+		c = $('ch' + i);
+		if(!bSet && c && c.hasChildNodes && c.firstChild && c.firstChild.checked) {
+			b.value = 'edit';
+			bSet = true;
+		}
+	}
+	_settings = settings;
+
+	if(!bSet) b.value = 'add';
+	$('del').disabled = !bSet;
+	$('n').value = j + 1;
+
+	$('json').value = JSON.stringify(settings, null, 1);
+}
+
+function clickTable() {
+	var e = event.srcElement, id = null;
+	while(id == null || id.length == 0) {
+		if(!e.id) e = e.parentNode;
+		if(e) id = e.id;
+	}
+	if(id.match(/ch\d+/)) updateDisplay();
+}
+
+function clickCheck() {
+	var tar = $('check').checked, i, n = Number($('n').value);
+	for(i = 0; i < n; i++) {
+		$('ch' + i).firstChild.checked = tar;
+	}
+
+	updateDisplay();
+}
+
+function updatePassword() {
+	if(!confirm('update?')) return;
+	var ta = $('accountList'), c, i, n = Number($('n').value);
+	for(i = 0; i < n; i++) {
+		c = $('ch' + i);
+		if(c && c.hasChildNodes && c.firstChild.checked) {
+			c = $('password' + i);
+			if(c) {
+				if(c.hasChildNodes && c.firstChild && c.firstChild.type == 'text') {
+					c.firstChild.value = JuneUtil.makePassword(getText('rule' + i), Math.random);
+				} else {
+					c.innerText = JuneUtil.makePassword(getText('rule' + i), Math.random);
+				}
+			}
+		}
+	}
+
+	updateDisplay();
+}
+
+
+function getCookies() {
+	var ret = {};
+	var c = document.cookie;
+	if(c && c.length) {
+		var cs = c.split(';'), css;
+		for(var i = 0; i < cs.length; i++) {
+			css = cs[i].split('=');
+			ret[css[0].replace(/^\s*/, '')] = decodeURIComponent(css[1]);
+		}
+	}
+	return ret;
+}
+function setCookies() {
+	var setCookie = function(name, value) {
+		document.cookie = name + '=' + encodeURIComponent(value) + '; max-age=8640000';
+	};
+	setCookie('e1', $('e1').value);
+	setCookie('e2', $('e2').value);
+}
+function save() {
+	var key = JuneUtil.ints2bytes(JuneUtil.sha256($('pass').value))
+	var mt = new MersenneTwister();
+	var iv = JuneUtil.ints2bytes(new Array(mt.nextInt(), mt.nextInt(), mt.nextInt(), mt.nextInt()));
+	var encs = JuneUtil.split(Base64.toBase64(JuneUtil.b2u(JuneUtil.encrypt(JuneUtil.u2b(RawDeflate.deflate(Base64.utob($('json').value))), key, iv))), 2)
+	$('e1').value = encs[0];
+	$('e2').value = encs[1];
+	setCookies();
+}
+function init() {
+	var encs = getCookies();
+	$('e1').value = encs.e1
+	$('e2').value = encs.e2
+	var key = JuneUtil.ints2bytes(JuneUtil.sha256($('pass').value))
+	$('json').value = Base64.btou(RawDeflate.inflate(JuneUtil.b2u(JuneUtil.decrypt(JuneUtil.u2b(Base64.fromBase64(JuneUtil.join($('e1').value, $('e2').value))), key))))
+	_settings = JSON.parse($('json').value);
+
+	var ta = $('accountList');
+	while(ta.firstChild != ta.lastChild) ta.removeChild(ta.lastChild);
+	var createTdEx = function(id, n) {
+		var td = createTd(id, n);
+		if(_settings[n][id]) td.innerText = _settings[n][id];
+		return td;
+	}
+	for(var i = 0; i < _settings.length; i++) {
+		var tr = document.createElement('tr'), j = 0;
+		var td = createTd('ch', i, '', _textLen[j++]);
+		if(td && td.hasChildNodes && td.firstChild && td.firstChild.type == 'checkbox') td.firstChild.checked = false;
+		tr.appendChild(td);
+		tr.appendChild(createTdEx('name', i));
+		tr.appendChild(createTdEx('account', i));
+		tr.appendChild(createTdEx('password', i));
+		tr.appendChild(createTdEx('rule', i));
+		td = createTd('url', i)
+		if(_settings[i]['url']) {
+			var a = document.createElement('a');
+			a.href = _settings[i]['url'];
+			a.innerText = 'url';
+			td.appendChild(a);
+		}
+		tr.appendChild(td);
+		tr.appendChild(createTdEx('create', i));
+		tr.appendChild(createTdEx('update', i));
+		tr.appendChild(createTdEx('memo', i));
+		ta.appendChild(tr);
+	}
+	$('n').value = _settings.length;
+}
+</script>
+<style type="text/css"> 
+.accountList {
+	border: 1px solid #83acd0;
+	border-collapse: collapse;
+	background-color:#fff;
+}
+.accountList th {
+	color: #393939;
+	border: 1px solid #83acd0;
+	padding: 5px;
+	background-color: #eaf1f7;
+}
+.accountList td {
+	border: 1px solid #83acd0;
+	padding: 3px 10px;
+}
+.accountList tr:nth-child(odd) {
+	background-color: #eaf4ff;
+}
+.accountList tr:hover {
+	background: #83acd0;
+/*
+	-o-transition: all 0.1s ease-in-out;
+	-webkit-transition: all 0.1s ease-in-out;
+	-moz-transition: all 0.1s ease-in-out;
+	-ms-transition: all 0.1s ease-in-out;
+	transition: all 0.1s ease-in-out;
+*/
+}
+</style>
+</head>
+<body>
+<h1>june client encrypt memo</h1>
+<table class='accountList' id='accountList' onclick='clickTable()'>
+<tr>
+	<th><input id='check' type='checkbox' onclick='clickCheck()'></th><th>Name</th><th>Account</th><th>Password</th><th>Rule</th><th>Login URL</th><th>create</th><th>update</th><th>Memo</th>
+</tr>
+<tr>
+</tr>
+</table>
+<input id='n' type='hidden' value='0'>
+<input id='add' type='button' onclick='add("New", "", "", "([a-z]{5}[A-Z]{5}[0-9]{3}[!#$%&=^@,.]{1})", "", "", "", "")' value='add'>
+<input id='del' type='button' disabled onclick='del()' value='del'>
+&nbsp;
+<input id='pass' type='button' onclick='updatePassword()' value='update password'>
+<br>
+<br>
+master password: <input id='pass' type='password' value=''> <input id='init' type='button' onclick='init()' value='reload'> <input id='save' type='button' onclick='save()' value='save'><br>
+<textarea id='e1' cols="32" rows="16"></textarea><textarea id='e2' cols="32" rows="16"></textarea>
+<textarea id='json' cols="64" rows="16"></textarea><br>
+</body>
+</html>

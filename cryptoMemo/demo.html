@@ -1,0 +1,68 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>june client encrypt memo</title>
+</head>
+<body>
+<h1>june client encrypt memo</h1>
+<pre>
+「Webサービスは信用ならない」
+そんなアナタに贈る、クライアント側暗号化ドキュメントの分散格納。
+</pre>
+<dl>
+<dt>Original:<input type="button" value="Enc" onclick="(function(that, pass, dst, dst2, dstd, res){
+  setTimeout(function(){
+	var key = JuneUtil.ints2bytes(JuneUtil.sha256(pass))
+	var mt = new MersenneTwister();
+	var iv = JuneUtil.ints2bytes(new Array(mt.nextInt(), mt.nextInt(), mt.nextInt(), mt.nextInt()));
+	var encs = JuneUtil.split(Base64.toBase64(JuneUtil.b2u(JuneUtil.encrypt(JuneUtil.u2b(RawDeflate.deflate(Base64.utob(that.value))), key, iv))), 2)
+	dst.value = encs[0]
+	dst2.value = encs[1]
+	key = JuneUtil.ints2bytes(JuneUtil.sha256(pass))
+	dstd.value = Base64.btou(RawDeflate.inflate(JuneUtil.b2u(JuneUtil.decrypt(JuneUtil.u2b(Base64.fromBase64(JuneUtil.join(dst.value, dst2.value))), key))))
+	res.value = (that.value == dstd.value) + '\n(' + dst.value.length + '+' + dst2.value.length + ')/' + that.value.length + '=' + (Math.ceil(((dst.value.length + dst2.value.length) / that.value.length * 10000)) / 100) + '%'
+  },0)
+})($('inflated'),'hogehoge',$('deflated'),$('deflated2'),$('decompressed'),$('result'))"></dt>
+<dd><textarea id="inflated" cols="64" rows="16"></textarea></dd>
+<dt>Deflated + Encrypt + Base64-Encoded:<input type="button" value="Dec" onclick="(function(that, that2, pass, dst, res){
+  setTimeout(function(){
+	var key = JuneUtil.ints2bytes(JuneUtil.sha256(pass))
+	dst.value = Base64.btou(RawDeflate.inflate(JuneUtil.b2u(JuneUtil.decrypt(JuneUtil.u2b(Base64.fromBase64(JuneUtil.join(that.value, that2.value))), key))))
+	res.value = '(' + that.value.length + '+' + that2.value.length + ')/' + dst.value.length + '=' + (Math.ceil(((that.value.length + that2.value.length) / dst.value.length * 10000)) / 100) + '%'
+  },0)
+})($('deflated'),$('deflated2'),'hogehoge',$('decompressed'),$('result'))"></dt>
+<dd><textarea id="deflated" cols="32" rows="16"></textarea><textarea id="deflated2" cols="32" rows="16"></textarea></dd>
+<dt>Inflated + Decrypt + Base64-Decoded:</dt>
+<dd><textarea id="decompressed" cols="64" rows="16"></textarea></dd>
+<dt>Result:</dt>
+<dd><textarea id="result" cols="64" rows="2"></textarea></dd>
+</dl>
+<pre>
+データの圧縮・Base64は
+http://blog.livedoor.jp/dankogai/archives/51183588.html
+
+AES暗号・復号/SHA256は
+http://cryptico.wwwtyro.net/
+
+乱数生成は、Mersenne Twister
+http://homepage2.nifty.com/magicant/sjavascript/mt.html
+
+AES暗号化キーは、パスフレーズのSHA256。
+CBC暗号化のIVは、メルセンヌツイスター（時刻seed）で。
+元のメッセージを、Deflate圧縮、AES暗号化、Base64エンコード、分割してサーバーに格納する。
+分割しているため、それぞれが流出してもそれだけでは意味をなさない。
+複数格納しておけば、一つのWebサービスに依存することもなく、サービス終了におびえなくても済む。
+分割メッセージを全て取得できれば、結合、Base64デコード、AES復号化、Inflate展開できる。
+</pre>
+<script src="./base64.js"></script>
+<script src="./rawinflate.js"></script>
+<script src="./rawdeflate.js"></script>
+<script src="./aes.js"></script>
+<script src="./mt.js"></script>
+<script src="./aesutil.js"></script>
+<script>
+$ = function(id){ return document.getElementById(id) };
+</script>
+</body>
+</html>

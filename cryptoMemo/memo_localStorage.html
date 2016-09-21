@@ -1,0 +1,119 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>june client encrypt memo</title>
+<script src="./base64.js"></script>
+<script src="./rawinflate.js"></script>
+<script src="./rawdeflate.js"></script>
+<script src="./aes.js"></script>
+<script src="./mt.js"></script>
+<script src="./aesutil.js"></script>
+<script>
+$ = function(id){ return document.getElementById(id) };
+var _text;
+
+function enc() {
+	if($('dd').style.display == 'none') edit();
+
+	var key = JuneUtil.ints2bytes(JuneUtil.sha256($('pass').value))
+	var mt = new MersenneTwister();
+	var iv = JuneUtil.ints2bytes(new Array(mt.nextInt(), mt.nextInt(), mt.nextInt(), mt.nextInt()));
+	var encs = JuneUtil.split(Base64.toBase64(JuneUtil.b2u(JuneUtil.encrypt(JuneUtil.u2b(RawDeflate.deflate(Base64.utob(_text))), key, iv))), 2)
+	$('e1').value = encs[0];
+	$('e2').value = encs[1];
+	$('status').innerText = "not saved";
+}
+function dec() {
+	if($('de').style.display == 'none') edit();
+
+	var key = JuneUtil.ints2bytes(JuneUtil.sha256($('pass').value))
+	$('de').innerText = Base64.btou(RawDeflate.inflate(JuneUtil.b2u(JuneUtil.decrypt(JuneUtil.u2b(Base64.fromBase64(JuneUtil.join($('e1').value, $('e2').value))), key))))
+
+	if($('dd').style.display == 'none') edit();
+}
+
+function makepass() {
+	p.innerHTML = JuneUtil.makePassword($('rule').value, Math.random);
+}
+
+function loadSt() {
+	if(localStorage && (!$('e1').value.length || confirm('load?'))) {
+		$('e1').value = localStorage.getItem('e1');
+		$('e2').value = localStorage.getItem('e2');
+		if(localStorage.getItem('rep')) $('rep').value = localStorage.getItem('rep');
+		if(localStorage.getItem('font')) $('font').value = localStorage.getItem('font');
+		$('status').innerText = "loaded";
+	}
+	if(!localStorage) $('status').innerText = "no localStorage";
+}
+function saveSt() {
+	if(localStorage && (!localStorage.getItem('e1') || confirm('save?'))) {
+		localStorage.setItem('e1', $('e1').value);
+		localStorage.setItem('e2', $('e2').value);
+		localStorage.setItem('rep', $('rep').value);
+		localStorage.setItem('font', $('font').value);
+		$('status').innerText = "saved";
+	}
+}
+function clearSt() {
+	if(localStorage && confirm('clear?')) {
+		localStorage.clear();
+		$('status').innerText = "cleared";
+	}
+}
+
+function edit() {
+	if($('de').style.display == 'none') {
+		$('de').value = _text;
+		$('de').style.display = 'block';
+		$('dd').style.display = 'none';
+	} else {
+		_text = $('de').value
+		var txt = _text, reps = $('rep').value.split('\n');
+		for(var i = 0; i < reps.length; i++) {
+			var rs = reps[i].split('\t');
+			var re = null;
+			if(rs.length > 2) re = new RegExp(rs[0], rs[1]);
+			if(re) txt = txt.replace(re, rs[2]);
+		}
+		$('dd').style.fontFamily = $('font').value;
+		$('dd').innerHTML = txt;
+		$('de').style.display = 'none';
+		$('dd').style.display = 'block';
+	}
+}
+</script>
+</head>
+<body onload='loadSt()'>
+<h1>june client encrypt memo</h1>
+Password: <input id='pass' type='password' value=''>
+<input id='dec' type='button' onclick='dec()' value='decode'>
+<br>
+<a href='javascript:void(0)' onclick='edit()'>Message</a>:
+<input id='enc' type='button' onclick='enc()' value='encode'>
+<br>
+<hr>
+<textarea id='de' cols="64" rows="16"></textarea><div id='dd' style='display:none' ondblclick='edit()'></div>
+<hr>
+<br>
+Make password: rule <input id='rule' type='text' value='([a-z]{5}[A-Z]{5}[0-9]{3}[!#$%&=^@,.]{1})'><input id='mp' type='button' onclick='makepass()' value='make'>: <span id='p'></span><br>
+<br>
+Encrypted:<br>
+<textarea id='e1'></textarea><textarea id='e2'></textarea>
+<br><br>
+<a href='javascript:void(0)' onclick='loadSt()'>load</a>
+<a href='javascript:void(0)' onclick='saveSt()'>save</a>
+&nbsp;
+<a href='javascript:void(0)' onclick='clearSt()'>clear</a>
+&nbsp;
+<span id='status'></span>
+<br><br>
+Replace:<br>
+<textarea id='rep'>\n	g	<br>
+\t	g	&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;
+&nbsp;	g	&amp;nbsp;</textarea>
+<br><br>
+Font: <input id='font' type='text' value='monospace'>
+</body>
+</html>
