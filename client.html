@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>client: cross domain message</title>
+<script type="text/javascript">
+var IFRAME_NAME = 'crossDomainMessageServer';
+var logarea;
+
+// メッセージ受信イベント
+window.addEventListener('message', function(event) {
+    log('message event  ' + event.data);
+}, false);
+
+window.onload = function() {
+    logarea = document.getElementById('logarea');
+    log('onload');
+}
+
+function log(msg) {
+    var d = new Date();
+    var o = d.toLocaleTimeString() + '.' + ('00' + d.getMilliseconds()).slice(-3) + ' ' + msg + '\n';
+    logarea.innerHTML += o;
+    console.log(o);
+}
+
+function sendMessage() {
+    // iframeのwindowオブジェクトを取得
+    var ifrm = document.getElementById(IFRAME_NAME);
+    if(ifrm == null) {
+        var ifrm = document.createElement("IFRAME");
+        ifrm.setAttribute("src", "https://junjun777.github.io");
+        ifrm.setAttribute("id", IFRAME_NAME);
+        ifrm.setAttribute("style", "display:none;");
+        document.body.appendChild(ifrm);
+        ifrm.onload = function() {
+            var msg = document.getElementById('msg').value;
+            // 外部サイトにメッセージを投げる
+            this.contentWindow.postMessage(msg, 'https://junjun777.github.io');
+        };
+    } else {
+        ifrm.onload();
+    }
+}
+</script>
+</head>
+<body>
+<input id="msg" type="text" value="abc=123" />
+<input type="button" onclick="sendMessage()" value="test" />
+<textarea id="logarea" style="width:100%; height:300px;"></textarea>
+</body>
+</html>
