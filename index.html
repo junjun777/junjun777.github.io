@@ -1,1 +1,32 @@
-Hello world!
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>server: cross domain message</title>
+<script type="text/javascript">
+var logarea;
+
+// メッセージ受信イベント
+window.addEventListener('message', function(event) {
+    log('message event start  ' + event.data);
+    // メッセージ送信元のサイトに返答する
+    event.source.postMessage('WORLD!', event.origin);
+    log('message event end    ' + event.data);
+}, false);
+
+window.onload = function() {
+    logarea = document.getElementById('logarea');
+    logarea.innerHTML = '';
+    log('onload');
+}
+
+function log(msg) {
+    var d = new Date();
+    logarea.innerHTML += d.toLocaleTimeString() + '.' + ('00' + d.getMilliseconds()).slice(-3) + ' ' + msg + '\n';
+}
+</script>
+</head>
+<body>
+<textarea id="logarea" style="width:100%; height:300px;" />
+</body>
+</html>
