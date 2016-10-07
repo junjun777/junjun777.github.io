@@ -4,47 +4,30 @@
 <meta charset="UTF-8">
 <title>server: cross domain message</title>
 <script type="text/javascript">
-var logarea;
 
-// メッセージ受信イベント
 window.addEventListener('message', function(event) {
-    log('message event start  ' + event.data);
     var ret = event.data;
     var re = /([^=\s]*)(=?)(.*)/;
     var m = ret.match(re);
     if(m.length > 3) {
         if(m[2] == '=') {
-            if(m[3].length == 0) {
+            if(m[3] == '%00') {
                 localStorage.removeItem(m[1]);
             } else {
                 localStorage.setItem(m[1], m[3]);
             }
         } else {
-            ret += '=' + localStorage.getItem(ret);
+            var res = localStorage.getItem(ret);
+            if(res == null) { res = '%00'; }
+            ret += '=' + res;
         }
     }
-    if(event.source != window) {
-        // メッセージ送信元のサイトに返答する
-        event.source.postMessage(ret, event.origin);
-    }
-    log('message event end    ' + event.data);
+    event.source.postMessage(ret, event.origin);
 }, false);
 
-window.onload = function() {
-    logarea = document.getElementById('logarea');
-    logarea.innerHTML = '';
-    log('onload');
-}
-
-function log(msg) {
-    var d = new Date();
-    var o = d.toLocaleTimeString() + '.' + ('00' + d.getMilliseconds()).slice(-3) + ' ' + msg + '\n';
-    logarea.innerHTML += o;
-    //console.log(o);
-}
 </script>
 </head>
 <body>
-<textarea id="logarea" style="width:100%; height:300px;"></textarea>
+cross domain message server
 </body>
 </html>
