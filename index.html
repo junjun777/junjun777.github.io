@@ -9,19 +9,18 @@ var logarea;
 // メッセージ受信イベント
 window.addEventListener('message', function(event) {
     log('message event start  ' + event.data);
-    var ret = 'OK';
+    var ret = event.data;
     var re = /([^=\s]*)(=?)(.*)/;
-    var m = event.data.match(re);
+    var m = ret.match(re);
     if(m.length > 3) {
         if(m[2] == '=') {
-            ret = m[3];
             if(m[3].length == 0) {
                 localStorage.removeItem(m[1]);
             } else {
                 localStorage.setItem(m[1], ret);
             }
         } else {
-            ret = localStorage.getItem(m[1]);
+            ret += '=' + localStorage.getItem(ret);
         }
     }
     if(event.source != window) {
