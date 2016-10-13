@@ -1,0 +1,20 @@
+<html>
+<head>
+<title>test</title>
+</head>
+<body>
+test.html
+<script>
+console.log(window);
+console.log(window.top);
+console.log(window.parent);
+console.log(window.top.parent);
+document.write('<br>window==window.top ' + (window == window.top));
+document.write('<br>window==window.parent ' + (window == window.parent));
+document.write('<br>window==window.top.parent ' + (window == window.top.parent));
+document.write('<br>window.top==window.parent ' + (window.top == window.parent));
+document.write('<br>window.top==window.top.parent ' + (window.top == window.top.parent));
+document.write('<br>window.parent==window.top.parent ' + (window.parent == window.top.parent));
+</script>
+</body>
+</html>
