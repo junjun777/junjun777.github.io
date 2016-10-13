@@ -17,11 +17,23 @@ document.write('<br>window.top==window.top.parent ' + (window.top == window.top.
 document.write('<br>window.parent==window.top.parent ' + (window.parent == window.top.parent));
 document.write('<br>');
 document.write('<br>window.location ' + (window.location));
-document.write('<br>window.top.location ' + (window.top.location));
-document.write('<br>window.parent.location ' + (window.parent.location));
-document.write('<br>window.top.parent.location ' + (window.top.parent.location));
+try {
+	document.write('<br>window.top.location ' + (window.top.location));
+} catch (e) {
+	document.write('<br>window.top.location ng');
+}
+try {
+	document.write('<br>window.parent.location ' + (window.parent.location));
+} catch (e) {
+	document.write('<br>window.parent.location ng');
+}
+try {
+	document.write('<br>window.top.parent.location ' + (window.top.parent.location));
+} catch (e) {
+	document.write('<br>window.top.parent.location ng');
+}
 </script>
 <hr>
-<iframe src='http://junjun777.github.io/test.html'></iframe>
+<iframe src='//junjun777.github.io/test.html'></iframe>
 </body>
 </html>
