@@ -5,6 +5,14 @@
 <body>
 test.html
 <script>
+// メッセージ受信イベント
+window.addEventListener('message', function(event) {
+    console.log('message event  ' + event.data);
+    if(window == window.parent) {
+        event.source.postMessage('postMessage reply', event.origin);
+    }
+}, false);
+
 console.log(window);
 console.log(window.top);
 console.log(window.parent);
@@ -31,6 +39,10 @@ try {
 	document.write('<br>window.top.parent.location ' + (window.top.parent.location));
 } catch (e) {
 	document.write('<br>window.top.parent.location ng');
+}
+
+if(window != window.parent) {
+    window.parent.postMessage('postMessage send', '*');
 }
 </script>
 <hr>
