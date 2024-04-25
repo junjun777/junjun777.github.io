@@ -1,27 +1,27 @@
 <!DOCTYPE html>
-<html lang=&quot;en&quot; >
+<html lang='en' >
 
 <head>
-  <meta charset=&quot;UTF-8&quot;>
+  <meta charset='UTF-8'>
   
 
-    <link rel=&quot;apple-touch-icon&quot; type=&quot;image/png&quot; href=&quot;https://cpwebassets.codepen.io/assets/favicon/apple-touch-icon-5ae1a0698dcc2402e9712f7d01ed509a57814f994c660df9f7a952f3060705ee.png&quot; />
+    <link rel='apple-touch-icon' type='image/png' href='https://cpwebassets.codepen.io/assets/favicon/apple-touch-icon-5ae1a0698dcc2402e9712f7d01ed509a57814f994c660df9f7a952f3060705ee.png' />
 
-    <meta name=&quot;apple-mobile-web-app-title&quot; content=&quot;CodePen&quot;>
+    <meta name='apple-mobile-web-app-title' content='CodePen'>
 
-    <link rel=&quot;shortcut icon&quot; type=&quot;image/x-icon&quot; href=&quot;https://cpwebassets.codepen.io/assets/favicon/favicon-aec34940fbc1a6e787974dcd360f2c6b63348d4b1f4e06c77743096d55480f33.ico&quot; />
+    <link rel='shortcut icon' type='image/x-icon' href='https://cpwebassets.codepen.io/assets/favicon/favicon-aec34940fbc1a6e787974dcd360f2c6b63348d4b1f4e06c77743096d55480f33.ico' />
 
-    <link rel=&quot;mask-icon&quot; type=&quot;image/x-icon&quot; href=&quot;https://cpwebassets.codepen.io/assets/favicon/logo-pin-b4b4269c16397ad2f0f7a01bcdf513a1994f4c94b8af2f191c09eb0d601762b1.svg&quot; color=&quot;#111&quot; />
+    <link rel='mask-icon' type='image/x-icon' href='https://cpwebassets.codepen.io/assets/favicon/logo-pin-b4b4269c16397ad2f0f7a01bcdf513a1994f4c94b8af2f191c09eb0d601762b1.svg' color='#111' />
 
 
 
   
-    <script src=&quot;https://cpwebassets.codepen.io/assets/common/stopExecutionOnTimeout-2c7831bb44f98c1391d6a4ffda0e1fd302503391ca806e7fcc7b9b87197aec26.js&quot;></script>
+    <script src='https://cpwebassets.codepen.io/assets/common/stopExecutionOnTimeout-2c7831bb44f98c1391d6a4ffda0e1fd302503391ca806e7fcc7b9b87197aec26.js'></script>
 
 
   <title>CodePen - MediaPipe Face Landmarker Task for web</title>
 
-    <link rel=&quot;canonical&quot; href=&quot;https://codepen.io/mediapipe-preview/pen/OJBVQJm&quot;>
+    <link rel='canonical' href='https://codepen.io/mediapipe-preview/pen/OJBVQJm'>
   
   
   
@@ -29,33 +29,33 @@
 <style>
 /* Copyright 2023 The MediaPipe Authors.
 
-Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
+Licensed under the Apache License, Version 2.0 (the 'License');
 you may not use this file except in compliance with the License.
 You may obtain a copy of the License at
 
      http://www.apache.org/licenses/LICENSE-2.0
 
 Unless required by applicable law or agreed to in writing, software
-distributed under the License is distributed on an &quot;AS IS&quot; BASIS,
+distributed under the License is distributed on an 'AS IS' BASIS,
 WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License. */
 
 /* Copyright 2022 The MediaPipe Authors.
 
-Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
+Licensed under the Apache License, Version 2.0 (the 'License');
 you may not use this file except in compliance with the License.
 You may obtain a copy of the License at
 
      http://www.apache.org/licenses/LICENSE-2.0
 
 Unless required by applicable law or agreed to in writing, software
-distributed under the License is distributed on an &quot;AS IS&quot; BASIS,
+distributed under the License is distributed on an 'AS IS' BASIS,
 WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License. */
 
-@use &quot;@material&quot;;
+@use '@material';
 body {
   font-family: helvetica, arial, sans-serif;
   margin: 2em;
@@ -188,83 +188,83 @@ footer {
   
 </head>
 
-<body translate=&quot;no&quot;>
+<body translate='no'>
   <!-- Copyright 2023 The MediaPipe Authors.
 
-Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
+Licensed under the Apache License, Version 2.0 (the 'License');
 you may not use this file except in compliance with the License.
 You may obtain a copy of the License at
 
      http://www.apache.org/licenses/LICENSE-2.0
 
 Unless required by applicable law or agreed to in writing, software
-distributed under the License is distributed on an &quot;AS IS&quot; BASIS,
+distributed under the License is distributed on an 'AS IS' BASIS,
 WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License. -->
 <html>
 <head>
-  <meta charset=&quot;utf-8&quot;>
-  <meta http-equiv=&quot;Cache-control&quot; content=&quot;no-cache, no-store, must-revalidate&quot;>
-  <meta http-equiv=&quot;Pragma&quot; content=&quot;no-cache&quot;>
-  <meta name=&quot;viewport&quot; content=&quot;width=device-width, initial-scale=1, user-scalable=no&quot;>
+  <meta charset='utf-8'>
+  <meta http-equiv='Cache-control' content='no-cache, no-store, must-revalidate'>
+  <meta http-equiv='Pragma' content='no-cache'>
+  <meta name='viewport' content='width=device-width, initial-scale=1, user-scalable=no'>
   <title>Face Landmarker</title>
 
-  <link href=&quot;https://unpkg.com/material-components-web@latest/dist/material-components-web.min.css&quot; rel=&quot;stylesheet&quot;>
-  <script src=&quot;https://unpkg.com/material-components-web@latest/dist/material-components-web.min.js&quot;></script>
+  <link href='https://unpkg.com/material-components-web@latest/dist/material-components-web.min.css' rel='stylesheet'>
+  <script src='https://unpkg.com/material-components-web@latest/dist/material-components-web.min.js'></script>
 </head>
 <body>
   <h1>Face landmark detection using the MediaPipe FaceLandmarker task</h1>
 
-  <section id=&quot;demos&quot; class=&quot;invisible&quot;>
+  <section id='demos' class='invisible'>
     <h2>Demo: Detecting Images</h2>
     <p><b>Click on an image below</b> to see the key landmarks of the face.</p>
 
-    <div class=&quot;detectOnClick&quot;>
-      <img src=&quot;https://storage.googleapis.com/mediapipe-assets/portrait.jpg&quot; width=&quot;100%&quot; crossorigin=&quot;anonymous&quot; title=&quot;Click to get detection!&quot; />
+    <div class='detectOnClick'>
+      <img src='https://storage.googleapis.com/mediapipe-assets/portrait.jpg' width='100%' crossorigin='anonymous' title='Click to get detection!' />
     </div>
-    <div class=&quot;blend-shapes&quot;>
-      <ul class=&quot;blend-shapes-list&quot; id=&quot;image-blend-shapes&quot;></ul>
+    <div class='blend-shapes'>
+      <ul class='blend-shapes-list' id='image-blend-shapes'></ul>
     </div>
 
     <h2>Demo: Webcam continuous face landmarks detection</h2>
     <p>Hold your face in front of your webcam to get real-time face landmarker detection.</br>Click <b>enable webcam</b> below and grant access to the webcam if prompted.</p>
 
-    <div id=&quot;liveView&quot; class=&quot;videoView&quot;>
-      <button id=&quot;webcamButton&quot; class=&quot;mdc-button mdc-button--raised&quot;>
-        <span class=&quot;mdc-button__ripple&quot;></span>
-        <span class=&quot;mdc-button__label&quot;>ENABLE WEBCAM</span>
+    <div id='liveView' class='videoView'>
+      <button id='webcamButton' class='mdc-button mdc-button--raised'>
+        <span class='mdc-button__ripple'></span>
+        <span class='mdc-button__label'>ENABLE WEBCAM</span>
       </button>
-      <div style=&quot;position: relative;&quot;>
-        <video id=&quot;webcam&quot; style=&quot;position: abso&quot; autoplay playsinline></video>
-        <canvas class=&quot;output_canvas&quot; id=&quot;output_canvas&quot; style=&quot;position: absolute; left: 0px; top: 0px;&quot;></canvas>
+      <div style='position: relative;'>
+        <video id='webcam' style='position: abso' autoplay playsinline></video>
+        <canvas class='output_canvas' id='output_canvas' style='position: absolute; left: 0px; top: 0px;'></canvas>
       </div>
     </div>
-    <div class=&quot;blend-shapes&quot;>
-      <ul class=&quot;blend-shapes-list&quot; id=&quot;video-blend-shapes&quot;></ul>
+    <div class='blend-shapes'>
+      <ul class='blend-shapes-list' id='video-blend-shapes'></ul>
     </div>
   </section>
 </body>
 </html>
   
-      <script id=&quot;rendered-js&quot; type=&quot;module&quot;>
+      <script id='rendered-js' type='module'>
 // Copyright 2023 The MediaPipe Authors.
-// Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
+// Licensed under the Apache License, Version 2.0 (the 'License');
 // you may not use this file except in compliance with the License.
 // You may obtain a copy of the License at
 //      http://www.apache.org/licenses/LICENSE-2.0
 // Unless required by applicable law or agreed to in writing, software
-// distributed under the License is distributed on an &quot;AS IS&quot; BASIS,
+// distributed under the License is distributed on an 'AS IS' BASIS,
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the License for the specific language governing permissions and
 // limitations under the License.
-import vision from &quot;https://cdn.jsdelivr.net/npm/@mediapipe/tasks-vision@0.10.3&quot;;
+import vision from 'https://cdn.jsdelivr.net/npm/@mediapipe/tasks-vision@0.10.3';
 const { FaceLandmarker, FilesetResolver, DrawingUtils } = vision;
-const demosSection = document.getElementById(&quot;demos&quot;);
-const imageBlendShapes = document.getElementById(&quot;image-blend-shapes&quot;);
-const videoBlendShapes = document.getElementById(&quot;video-blend-shapes&quot;);
+const demosSection = document.getElementById('demos');
+const imageBlendShapes = document.getElementById('image-blend-shapes');
+const videoBlendShapes = document.getElementById('video-blend-shapes');
 let faceLandmarker;
-let runningMode = &quot;IMAGE&quot;;
+let runningMode = 'IMAGE';
 let enableWebcamButton;
 let webcamRunning = false;
 const videoWidth = 480;
@@ -272,17 +272,17 @@ const videoWidth = 480;
 // loading. Machine Learning models can be large and take a moment to
 // get everything needed to run.
 async function createFaceLandmarker() {
-    const filesetResolver = await FilesetResolver.forVisionTasks(&quot;https://cdn.jsdelivr.net/npm/@mediapipe/tasks-vision@0.10.3/wasm&quot;);
+    const filesetResolver = await FilesetResolver.forVisionTasks('https://cdn.jsdelivr.net/npm/@mediapipe/tasks-vision@0.10.3/wasm');
     faceLandmarker = await FaceLandmarker.createFromOptions(filesetResolver, {
         baseOptions: {
             modelAssetPath: `https://storage.googleapis.com/mediapipe-models/face_landmarker/face_landmarker/float16/1/face_landmarker.task`,
-            delegate: &quot;GPU&quot;
+            delegate: 'GPU'
         },
         outputFaceBlendshapes: true,
         runningMode,
         numFaces: 1
     });
-    demosSection.classList.remove(&quot;invisible&quot;);
+    demosSection.classList.remove('invisible');
 }
 createFaceLandmarker();
 /********************************************************************
@@ -292,24 +292,24 @@ createFaceLandmarker();
 // In this demo, we have put all our clickable images in divs with the
 // CSS class 'detectionOnClick'. Lets get all the elements that have
 // this class.
-const imageContainers = document.getElementsByClassName(&quot;detectOnClick&quot;);
+const imageContainers = document.getElementsByClassName('detectOnClick');
 // Now let's go through all of these and add a click event listener.
 for (let imageContainer of imageContainers) {
     // Add event listener to the child element whichis the img element.
-    imageContainer.children[0].addEventListener(&quot;click&quot;, handleClick);
+    imageContainer.children[0].addEventListener('click', handleClick);
 }
 // When an image is clicked, let's detect it and display results!
 async function handleClick(event) {
     if (!faceLandmarker) {
-        console.log(&quot;Wait for faceLandmarker to load before clicking!&quot;);
+        console.log('Wait for faceLandmarker to load before clicking!');
         return;
     }
-    if (runningMode === &quot;VIDEO&quot;) {
-        runningMode = &quot;IMAGE&quot;;
+    if (runningMode === 'VIDEO') {
+        runningMode = 'IMAGE';
         await faceLandmarker.setOptions({ runningMode });
     }
     // Remove all landmarks drawed before
-    const allCanvas = event.target.parentNode.getElementsByClassName(&quot;canvas&quot;);
+    const allCanvas = event.target.parentNode.getElementsByClassName('canvas');
     for (var i = allCanvas.length - 1; i >= 0; i--) {
         const n = allCanvas[i];
         n.parentNode.removeChild(n);
@@ -319,64 +319,64 @@ async function handleClick(event) {
     // which we wait to complete and then call a function to
     // print out the results of the prediction.
     const faceLandmarkerResult = faceLandmarker.detect(event.target);
-    const canvas = document.createElement(&quot;canvas&quot;);
-    canvas.setAttribute(&quot;class&quot;, &quot;canvas&quot;);
-    canvas.setAttribute(&quot;width&quot;, event.target.naturalWidth + &quot;px&quot;);
-    canvas.setAttribute(&quot;height&quot;, event.target.naturalHeight + &quot;px&quot;);
-    canvas.style.left = &quot;0px&quot;;
-    canvas.style.top = &quot;0px&quot;;
+    const canvas = document.createElement('canvas');
+    canvas.setAttribute('class', 'canvas');
+    canvas.setAttribute('width', event.target.naturalWidth + 'px');
+    canvas.setAttribute('height', event.target.naturalHeight + 'px');
+    canvas.style.left = '0px';
+    canvas.style.top = '0px';
     canvas.style.width = `${event.target.width}px`;
     canvas.style.height = `${event.target.height}px`;
     event.target.parentNode.appendChild(canvas);
-    const ctx = canvas.getContext(&quot;2d&quot;);
+    const ctx = canvas.getContext('2d');
     const drawingUtils = new DrawingUtils(ctx);
     for (const landmarks of faceLandmarkerResult.faceLandmarks) {
-        drawingUtils.drawConnectors(landmarks, FaceLandmarker.FACE_LANDMARKS_TESSELATION, { color: &quot;#C0C0C070&quot;, lineWidth: 1 });
-        drawingUtils.drawConnectors(landmarks, FaceLandmarker.FACE_LANDMARKS_RIGHT_EYE, { color: &quot;#FF3030&quot; });
-        drawingUtils.drawConnectors(landmarks, FaceLandmarker.FACE_LANDMARKS_RIGHT_EYEBROW, { color: &quot;#FF3030&quot; });
-        drawingUtils.drawConnectors(landmarks, FaceLandmarker.FACE_LANDMARKS_LEFT_EYE, { color: &quot;#30FF30&quot; });
-        drawingUtils.drawConnectors(landmarks, FaceLandmarker.FACE_LANDMARKS_LEFT_EYEBROW, { color: &quot;#30FF30&quot; });
-        drawingUtils.drawConnectors(landmarks, FaceLandmarker.FACE_LANDMARKS_FACE_OVAL, { color: &quot;#E0E0E0&quot; });
+        drawingUtils.drawConnectors(landmarks, FaceLandmarker.FACE_LANDMARKS_TESSELATION, { color: '#C0C0C070', lineWidth: 1 });
+        drawingUtils.drawConnectors(landmarks, FaceLandmarker.FACE_LANDMARKS_RIGHT_EYE, { color: '#FF3030' });
+        drawingUtils.drawConnectors(landmarks, FaceLandmarker.FACE_LANDMARKS_RIGHT_EYEBROW, { color: '#FF3030' });
+        drawingUtils.drawConnectors(landmarks, FaceLandmarker.FACE_LANDMARKS_LEFT_EYE, { color: '#30FF30' });
+        drawingUtils.drawConnectors(landmarks, FaceLandmarker.FACE_LANDMARKS_LEFT_EYEBROW, { color: '#30FF30' });
+        drawingUtils.drawConnectors(landmarks, FaceLandmarker.FACE_LANDMARKS_FACE_OVAL, { color: '#E0E0E0' });
         drawingUtils.drawConnectors(landmarks, FaceLandmarker.FACE_LANDMARKS_LIPS, {
-            color: &quot;#E0E0E0&quot;
+            color: '#E0E0E0'
         });
-        drawingUtils.drawConnectors(landmarks, FaceLandmarker.FACE_LANDMARKS_RIGHT_IRIS, { color: &quot;#FF3030&quot; });
-        drawingUtils.drawConnectors(landmarks, FaceLandmarker.FACE_LANDMARKS_LEFT_IRIS, { color: &quot;#30FF30&quot; });
+        drawingUtils.drawConnectors(landmarks, FaceLandmarker.FACE_LANDMARKS_RIGHT_IRIS, { color: '#FF3030' });
+        drawingUtils.drawConnectors(landmarks, FaceLandmarker.FACE_LANDMARKS_LEFT_IRIS, { color: '#30FF30' });
     }
     drawBlendShapes(imageBlendShapes, faceLandmarkerResult.faceBlendshapes);
 }
 /********************************************************************
 // Demo 2: Continuously grab image from webcam stream and detect it.
 ********************************************************************/
-const video = document.getElementById(&quot;webcam&quot;);
-const canvasElement = document.getElementById(&quot;output_canvas&quot;);
-const canvasCtx = canvasElement.getContext(&quot;2d&quot;);
+const video = document.getElementById('webcam');
+const canvasElement = document.getElementById('output_canvas');
+const canvasCtx = canvasElement.getContext('2d');
 // Check if webcam access is supported.
 function hasGetUserMedia() {
-    return !!(navigator.mediaDevices &amp;&amp; navigator.mediaDevices.getUserMedia);
+    return !!(navigator.mediaDevices && navigator.mediaDevices.getUserMedia);
 }
 // If webcam supported, add event listener to button for when user
 // wants to activate it.
 if (hasGetUserMedia()) {
-    enableWebcamButton = document.getElementById(&quot;webcamButton&quot;);
-    enableWebcamButton.addEventListener(&quot;click&quot;, enableCam);
+    enableWebcamButton = document.getElementById('webcamButton');
+    enableWebcamButton.addEventListener('click', enableCam);
 }
 else {
-    console.warn(&quot;getUserMedia() is not supported by your browser&quot;);
+    console.warn('getUserMedia() is not supported by your browser');
 }
 // Enable the live webcam view and start detection.
 function enableCam(event) {
     if (!faceLandmarker) {
-        console.log(&quot;Wait! faceLandmarker not loaded yet.&quot;);
+        console.log('Wait! faceLandmarker not loaded yet.');
         return;
     }
     if (webcamRunning === true) {
         webcamRunning = false;
-        enableWebcamButton.innerText = &quot;ENABLE PREDICTIONS&quot;;
+        enableWebcamButton.innerText = 'ENABLE PREDICTIONS';
     }
     else {
         webcamRunning = true;
-        enableWebcamButton.innerText = &quot;DISABLE PREDICTIONS&quot;;
+        enableWebcamButton.innerText = 'DISABLE PREDICTIONS';
     }
     // getUsermedia parameters.
     const constraints = {
@@ -385,7 +385,7 @@ function enableCam(event) {
     // Activate the webcam stream.
     navigator.mediaDevices.getUserMedia(constraints).then((stream) => {
         video.srcObject = stream;
-        video.addEventListener(&quot;loadeddata&quot;, predictWebcam);
+        video.addEventListener('loadeddata', predictWebcam);
     });
 }
 let lastVideoTime = -1;
@@ -393,15 +393,15 @@ let results = undefined;
 const drawingUtils = new DrawingUtils(canvasCtx);
 async function predictWebcam() {
     const radio = video.videoHeight / video.videoWidth;
-    video.style.width = videoWidth + &quot;px&quot;;
-    video.style.height = videoWidth * radio + &quot;px&quot;;
-    canvasElement.style.width = videoWidth + &quot;px&quot;;
-    canvasElement.style.height = videoWidth * radio + &quot;px&quot;;
+    video.style.width = videoWidth + 'px';
+    video.style.height = videoWidth * radio + 'px';
+    canvasElement.style.width = videoWidth + 'px';
+    canvasElement.style.height = videoWidth * radio + 'px';
     canvasElement.width = video.videoWidth;
     canvasElement.height = video.videoHeight;
     // Now let's start detecting the stream.
-    if (runningMode === &quot;IMAGE&quot;) {
-        runningMode = &quot;VIDEO&quot;;
+    if (runningMode === 'IMAGE') {
+        runningMode = 'VIDEO';
         await faceLandmarker.setOptions({ runningMode: runningMode });
     }
     let startTimeMs = performance.now();
@@ -411,15 +411,15 @@ async function predictWebcam() {
     }
     if (results.faceLandmarks) {
         for (const landmarks of results.faceLandmarks) {
-            drawingUtils.drawConnectors(landmarks, FaceLandmarker.FACE_LANDMARKS_TESSELATION, { color: &quot;#C0C0C070&quot;, lineWidth: 1 });
-            drawingUtils.drawConnectors(landmarks, FaceLandmarker.FACE_LANDMARKS_RIGHT_EYE, { color: &quot;#FF3030&quot; });
-            drawingUtils.drawConnectors(landmarks, FaceLandmarker.FACE_LANDMARKS_RIGHT_EYEBROW, { color: &quot;#FF3030&quot; });
-            drawingUtils.drawConnectors(landmarks, FaceLandmarker.FACE_LANDMARKS_LEFT_EYE, { color: &quot;#30FF30&quot; });
-            drawingUtils.drawConnectors(landmarks, FaceLandmarker.FACE_LANDMARKS_LEFT_EYEBROW, { color: &quot;#30FF30&quot; });
-            drawingUtils.drawConnectors(landmarks, FaceLandmarker.FACE_LANDMARKS_FACE_OVAL, { color: &quot;#E0E0E0&quot; });
-            drawingUtils.drawConnectors(landmarks, FaceLandmarker.FACE_LANDMARKS_LIPS, { color: &quot;#E0E0E0&quot; });
-            drawingUtils.drawConnectors(landmarks, FaceLandmarker.FACE_LANDMARKS_RIGHT_IRIS, { color: &quot;#FF3030&quot; });
-            drawingUtils.drawConnectors(landmarks, FaceLandmarker.FACE_LANDMARKS_LEFT_IRIS, { color: &quot;#30FF30&quot; });
+            drawingUtils.drawConnectors(landmarks, FaceLandmarker.FACE_LANDMARKS_TESSELATION, { color: '#C0C0C070', lineWidth: 1 });
+            drawingUtils.drawConnectors(landmarks, FaceLandmarker.FACE_LANDMARKS_RIGHT_EYE, { color: '#FF3030' });
+            drawingUtils.drawConnectors(landmarks, FaceLandmarker.FACE_LANDMARKS_RIGHT_EYEBROW, { color: '#FF3030' });
+            drawingUtils.drawConnectors(landmarks, FaceLandmarker.FACE_LANDMARKS_LEFT_EYE, { color: '#30FF30' });
+            drawingUtils.drawConnectors(landmarks, FaceLandmarker.FACE_LANDMARKS_LEFT_EYEBROW, { color: '#30FF30' });
+            drawingUtils.drawConnectors(landmarks, FaceLandmarker.FACE_LANDMARKS_FACE_OVAL, { color: '#E0E0E0' });
+            drawingUtils.drawConnectors(landmarks, FaceLandmarker.FACE_LANDMARKS_LIPS, { color: '#E0E0E0' });
+            drawingUtils.drawConnectors(landmarks, FaceLandmarker.FACE_LANDMARKS_RIGHT_IRIS, { color: '#FF3030' });
+            drawingUtils.drawConnectors(landmarks, FaceLandmarker.FACE_LANDMARKS_LEFT_IRIS, { color: '#30FF30' });
         }
     }
     drawBlendShapes(videoBlendShapes, results.faceBlendshapes);
@@ -433,12 +433,12 @@ function drawBlendShapes(el, blendShapes) {
         return;
     }
     console.log(blendShapes[0]);
-    let htmlMaker = &quot;&quot;;
+    let htmlMaker = '';
     blendShapes[0].categories.map((shape) => {
         htmlMaker += `
-      <li class=&quot;blend-shapes-item&quot;>
-        <span class=&quot;blend-shapes-label&quot;>${shape.displayName || shape.categoryName}</span>
-        <span class=&quot;blend-shapes-value&quot; style=&quot;width: calc(${+shape.score * 100}% - 120px)&quot;>${(+shape.score).toFixed(4)}</span>
+      <li class='blend-shapes-item'>
+        <span class='blend-shapes-label'>${shape.displayName || shape.categoryName}</span>
+        <span class='blend-shapes-value' style='width: calc(${+shape.score * 100}% - 120px)'>${(+shape.score).toFixed(4)}</span>
       </li>
     `;
     });
